@@ -17,8 +17,11 @@ if($want=="show"){
     showInterest($con);
 
 }
-if ($want="select"){
-   selectinterest($con);
+if ($want=="select"){
+   selectInterest($con);
+}
+if ($want=="selected"){
+   getSelectedInterset($con);
 }
 
 
@@ -53,7 +56,7 @@ function showInterest($con){
     }
     echo json_encode($interestdata);
 }
-function selectinterest ($con) {
+function selectInterest ($con) {
     $userid=$_REQUEST['userid'];
     $interestid=$_REQUEST['interestarea'];
     $query=  "INSERT INTO `getinterest`(`userid`, `interestid`) VALUES ('$userid','$interestid')";
@@ -61,5 +64,32 @@ function selectinterest ($con) {
         $result=null;
         $result->message="Good to Go !!!";
         echo json_encode($result);
+		die;
     }
 }
+	
+	function getSelectedInterset($con){
+		 $selectInterestdata=array();
+		$userid=$_REQUEST['userid'];
+		$query="SELECT * FROM `getinterest`,`interest` WHERE (getinterest.interestid=interest.id) and (getinterest.userid='$userid')";
+		// $arr= array()
+		 
+		 $res=mysqli_query($con,$query);
+		 while ($result=mysqli_fetch_array($res))
+    {
+        $interestobj=null;
+        $interestobj->id=$result['id'];
+		$interestobj->user_id=$result['userid'];
+        $interestobj->InterestArea=$result['InterestArrea'];
+
+        array_push($selectInterestdata,$interestobj);
+
+    }
+    echo json_encode($selectInterestdata);
+		 
+         
+		
+		
+		
+    }
+	

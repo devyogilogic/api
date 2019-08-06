@@ -19,6 +19,8 @@ $userid=$_REQUEST['userid'];
 
 header('Content-type: application/json;charset=utf-8');
 
+
+function GetUserQuestion($userid){
 $questiondata=array();
 $query="select * from posts where userid='$userid'";
 $source= mysqli_query($connection,$query);
@@ -32,4 +34,4 @@ while ($result=mysqli_fetch_array($source))
 //print_r($result);
 }
 echo json_encode($questiondata);
-
+}

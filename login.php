@@ -10,7 +10,9 @@ include"database.php";
 $emailid=$_REQUEST['emailid'];
 
 $password=$_REQUEST['password'];
-$username=$_REQUEST['username'];
+
+
+
 $want=$_REQUEST['want'];
 $con=$connection;
 error_reporting(E_ERROR | E_PARSE);
@@ -19,7 +21,7 @@ if($want=="login"){
     loginuser($emailid,$username,$password,$con);
 }
 else if ($want="signup"){
-
+      $username=$_REQUEST['username'];
     signup($emailid,$username,$password,$con);
 
 }
