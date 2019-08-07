@@ -6,7 +6,7 @@
  * Time: 06:15
  */
  include  "database.php";
-//error_reporting(E_ERROR | E_PARSE);
+error_reporting(E_ERROR | E_PARSE);
 header('Content-type: application/json;charset=utf-8');
  $userid=$_REQUEST['userid'];
  $questionpost=$_REQUEST['postdata'];
@@ -22,3 +22,4 @@ if (mysqli_query($connection, $query)) {
     $query = "update user set numberposts=numberposts+1  where id=$userid";
     mysqli_query($connection, $query);
 }
+

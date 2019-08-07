@@ -23,6 +23,11 @@ if ($want=="select"){
 if ($want=="selected"){
    getSelectedInterset($con);
 }
+if($want=="update"){
+	
+	updateInterest($con);
+	
+}
 
 
 
@@ -48,6 +53,8 @@ function showInterest($con){
     while ($result=mysqli_fetch_array($source))
     {
         $interestobj=null;
+		echo print_r([$result]);
+		
         $interestobj->id=$result['id'];
         $interestobj->InterestArea=$result['InterestArrea'];
 
@@ -58,15 +65,28 @@ function showInterest($con){
 }
 function selectInterest ($con) {
     $userid=$_REQUEST['userid'];
-    $interestid=$_REQUEST['interestarea'];
-    $query=  "INSERT INTO `getinterest`(`userid`, `interestid`) VALUES ('$userid','$interestid')";
-    if(mysqli_query($con,$query)){
-        $result=null;
-        $result->message="Good to Go !!!";
-        echo json_encode($result);
-		die;
+    $interestid=$_REQUEST['interestid'];
+	
+
+$Intersetarray = explode(',', $interestid);
+$c= count($Intersetarray);
+   for ($i = 0; $i <count($Intersetarray); $i++)  {
+          $query=  "INSERT INTO `getinterest`(`userid`, `interestid`) VALUES ('$userid',' $Intersetarray[$i]')";
+		 // echo $query;
+		  mysqli_query($con,$query);
+        }
+	
+      
+        $interestobj->Status="Good to go";
+		
+		 $query=  "Update user  set profilesetup='Y' where id='$userid'";
+		
+		 
+		  mysqli_query($con,$query);
+	 echo json_encode($interestobj);
+      
     }
-}
+
 	
 	function getSelectedInterset($con){
 		 $selectInterestdata=array();
@@ -82,14 +102,43 @@ function selectInterest ($con) {
 		$interestobj->user_id=$result['userid'];
         $interestobj->InterestArea=$result['InterestArrea'];
 
-        array_push($selectInterestdata,$interestobj);
+        array_push( $selectInterestdata,$interestobj);
 
     }
+	}
     echo json_encode($selectInterestdata);
 		 
          
+		function updateInterest($con){
+			
+			
+			    $userid=$_REQUEST['userid'];
+                $interestid=$_REQUEST['interestid'];
+	
+
+              $Intersetarray = explode(',', $interestid);
+			  
+			  $query="Delete from `getinterest` where  userid='$userid'  ";
+			 
+			  mysqli_query($con,$query);
+			  
+             $c= count($Intersetarray);
+			 
+			
+             for ($i = 0; $i <count($Intersetarray); $i++)  {
+            $query=  "INSERT INTO `getinterest`(`userid`, `interestid`) VALUES ('$userid',' $Intersetarray[$i]')";
+		   
+		  
+		   mysqli_query($con,$query);
+        }
+	
+      $interestobj=null;
+        $interestobj->Status="Good to go";
+	 echo json_encode($interestobj);
+			
+			
+		}
 		
 		
-		
-    }
+    
 	

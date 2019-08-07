@@ -12,28 +12,32 @@ include  "database.php";
 error_reporting(E_ERROR | E_PARSE);
 
 
-
-
-
-
+$con=$connection;
 
 $want=$_REQUEST['want'];
+
+	
 header('Content-type: application/json;charset=utf-8');
 
-if($want=="GetUser"){
-	
-	$userid=$_REQUEST['userid'];
-	function GetUserQuestion($userid);
+if($want=="Getuser"){
+getuser($connection);
 }
-function GetUserQuestion($userid){
+if($want=="Show"){
+show($connection);
+}
+
+function getuser($con){
+$userid=$_REQUEST['userid'];
 $questiondata=array();
-$query="select * from posts where userid='$userid'";
-$source= mysqli_query($connection,$query);
+$query="select * from posts,user where (posts.userid='$userid')and(user.id='$userid')";
+$source= mysqli_query($con,$query);
 while ($result=mysqli_fetch_array($source))
 {
     $questionobj=null;
     $questionobj->id=$result['id'];
     $questionobj->post=$result['post'];
+	$questionobj->username=$result['username'];
+	$questionobj->timeanddate=$result['TimeandDate'];
 
     array_push($questiondata,$questionobj);
 //print_r($result);
@@ -41,23 +45,18 @@ while ($result=mysqli_fetch_array($source))
 echo json_encode($questiondata);
 }
 
-
-
-if($want=="show"){
-	
-	showAll();
-}
-
-
-function showAll(){
-	$questiondata=array();
-$query="select * from posts ";
-$source= mysqli_query($connection,$query);
+function show($con){
+$userid=$_REQUEST['userid'];
+$questiondata=array();
+$query="select * from posts,user where (posts.userid=user.id)";
+$source= mysqli_query($con,$query);
 while ($result=mysqli_fetch_array($source))
 {
     $questionobj=null;
     $questionobj->id=$result['id'];
     $questionobj->post=$result['post'];
+	$questionobj->username=$result['username'];
+	$questionobj->timeanddate=$result['TimeandDate'];
 
     array_push($questiondata,$questionobj);
 //print_r($result);
